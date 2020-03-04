@@ -3,7 +3,7 @@
 <configuration>
 <property>
     <name>yarn.resourcemanager.bind-host</name>
-    <value><%= node['fqdn'] %></value>
+    <value><%= @bind_ip %></value>
     <description>The actual address the server will bind to. If this optional address is set, the RPC and webapp servers will bind to this address and the port specified in yarn.resourcemanager.address and yarn.resourcemanager.webapp.address, respectively. This is most useful for making RM listen to all interfaces by setting to 0.0.0.0.</description>
   </property>
 
@@ -58,7 +58,7 @@
 
   <property>
     <name>yarn.nodemanager.bind-host</name>
-    <value>0.0.0.0</value>
+    <value><%= @bind_ip %></value>
     <description>The actual address the server will bind to. If this optional address is set, the RPC and webapp servers will bind to this address and the port specified in yarn.nodemanager.address and yarn.nodemanager.webapp.address, respectively. This is most useful for making NM listen to all interfaces by setting to 0.0.0.0.</description>
   </property>
 

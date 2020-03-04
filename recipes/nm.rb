@@ -230,7 +230,7 @@ end
 # Register NodeManager with Consul
 template "#{node['hops']['bin_dir']}/consul/nm-health.sh" do
   source "consul/nm-health.sh.erb"
-  owner node['hops']['rm']['user']
+  owner node['hops']['yarn']['user']
   group node['hops']['group']
   mode 0750
 end
