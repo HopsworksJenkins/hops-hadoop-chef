@@ -18,13 +18,13 @@ file "#{node['hops']['conf_dir']}/dfs.exclude" do
   content node['hops']['dfs']['excluded_hosts'].gsub(',', "\n")
 end
 
-deps = ""
+deps = "consul.service"
 if exists_local("ndb", "mysqld")
-  deps = "mysqld.service "
+  deps = "#{deps} mysqld.service"
 end
 
 if node['hops']['tls']['crl_enabled'].casecmp?("true") and exists_local("hopsworks", "default")
-  deps += "glassfish-domain1.service "
+  deps = "#{deps} glassfish-domain1.service "
 end
 
 service_name="namenode"

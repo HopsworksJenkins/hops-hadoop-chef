@@ -2,9 +2,9 @@ include_recipe "hops::default"
 
 template_ssl_server()
 
-deps = ""
+deps = "consul.service"
 if exists_local("hops", "rm")
-  deps = "resourcemanager.service"
+  deps = "#{deps} resourcemanager.service"
 end
 
 yarn_service="nm"
