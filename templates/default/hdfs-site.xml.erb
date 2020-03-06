@@ -64,7 +64,7 @@
 
   <property>
     <name>dfs.namenode.rpc-address</name>
-    <value>local.n0de.cl4:<%= node['hops']['nn']['port'] %></value>
+    <value><%= @nn_address %>:<%= node['hops']['nn']['port'] %></value>
     <description>
       RPC address that handles all clients requests. In the case of HA/Federation where multiple namenodes exist,
       the name service id is added to the name e.g. dfs.namenode.rpc-address.ns1
@@ -75,7 +75,7 @@
 
   <property>
     <name>dfs.namenode.http-address</name>
-    <value>local.n0de.cl4:<%= node['hops']['nn']['http_port'] %></value>
+    <value><%= @nn_address %>:<%= node['hops']['nn']['http_port'] %></value>
     <description>The address and the base port where the dfs namenode web ui will listen on. </description>
   </property>
 
@@ -374,7 +374,7 @@
 
 <property>
   <name>dfs.namenode.https-address</name>
-  <value>local.n0de.cl4:<%= node['hops']['dfs']['https']['port'] %></value>
+  <value><%= @nn_address %>:<%= node['hops']['dfs']['https']['port'] %></value>
   <description>The address and the base port where the dfs namenode web ui will listen on. </description>
 </property>
 
