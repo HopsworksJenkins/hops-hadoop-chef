@@ -251,6 +251,12 @@ else
   nn_address = rpc_namenode_fqdn
 end
 
+if exists_local('consul', 'default')
+  service_discovery_enabled = "true"
+else
+  service_discovery_enabled = "false"
+end
+
 location_domain_id = node['hops']['nn']['private_ips_domainIds'].has_key?(my_ip) ? node['hops']['nn']['private_ips_domainIds'][my_ip] : 0
 template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   source "hdfs-site.xml.erb"
@@ -261,7 +267,8 @@ template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   variables({
     :location_domain_id => location_domain_id,
     :bind_ip => bind_ip,
-    :nn_address => nn_address
+    :nn_address => nn_address,
+    :service_discovery_enabled => service_discovery_enabled
   })
   action :create
 end
