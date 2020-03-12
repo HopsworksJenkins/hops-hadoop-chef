@@ -164,6 +164,12 @@ if node['ndb']['TransactionInactiveTimeout'].to_i < node['hops']['leader_check_i
  raise "The leader election protocol has a higher timeout than the transaction timeout in NDB. We can get false suspicions for a live leader. Invalid configuration."
 end
 
+if exists_local('consul', 'default')
+  service_discovery_enabled = "true"
+else
+  service_discovery_enabled = "false"
+end
+
 template "#{node['hops']['conf_dir']}/core-site.xml" do
   source "core-site.xml.erb"
   owner node['hops']['hdfs']['user']
@@ -182,7 +188,8 @@ template "#{node['hops']['conf_dir']}/core-site.xml" do
      :flinkUser => flinkUser,
      :nn_rpc_endpoint => nn_rpc_endpoint,
      :rpcSocketFactory => rpcSocketFactory,
-     :hopsworks_crl_uri => "https://#{glassfish_fqdn}:#{hopsworks_port}#{node['hops']['tls']['crl_fetch_path']}"
+     :hopsworks_crl_uri => "https://#{glassfish_fqdn}:#{hopsworks_port}#{node['hops']['tls']['crl_fetch_path']}",
+     :service_discovery_enabled => service_discovery_enabled
     }
   })
   action :create
@@ -251,12 +258,6 @@ else
   nn_address = rpc_namenode_fqdn
 end
 
-if exists_local('consul', 'default')
-  service_discovery_enabled = "true"
-else
-  service_discovery_enabled = "false"
-end
-
 location_domain_id = node['hops']['nn']['private_ips_domainIds'].has_key?(my_ip) ? node['hops']['nn']['private_ips_domainIds'][my_ip] : 0
 template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   source "hdfs-site.xml.erb"
@@ -267,8 +268,7 @@ template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   variables({
     :location_domain_id => location_domain_id,
     :bind_ip => bind_ip,
-    :nn_address => nn_address,
-    :service_discovery_enabled => service_discovery_enabled
+    :nn_address => nn_address
   })
   action :create
 end

@@ -51,6 +51,11 @@
     </description>
   </property>
 
+  <property>
+    <name>hops.service-discovery.enabled</name>
+    <value><%= @service_discovery_enabled %></value>
+    <description>Flag to get address from Service Discovery instead of configuration file.</description>
+  </property>
 
   <property>
     <name>hadoop.proxyuser.<%= node['hops']['hdfs']['user'] %>.hosts</name>
