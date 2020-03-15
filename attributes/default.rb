@@ -61,7 +61,8 @@ default['hops']['hdfs']['umask']               = "0022"
 
 
 default['hops']['root_url']                    = node['download_url']
-default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+#default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+default['hops']['dist_url']                    = node['hops']['root_url'] + "/antonis/hops/hops-"+ node['hops']['version'] + ".tgz"
 
 default['hops']['install_protobuf']            = "false"
 default['hops']['protobuf_url']                = "https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz"
