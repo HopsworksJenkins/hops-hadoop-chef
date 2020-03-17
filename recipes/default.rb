@@ -249,6 +249,14 @@ if conda_helpers.bind_services_private_ip
   bind_ip = my_ip
 end
 
+if node['hops']['nn']['private_ips'].include?(my_ip)
+  # If I'm a NameNode set it to my fqdn
+  nn_address = node['fqdn']
+else
+  # Otherwise use Service Discovery FQDN
+  nn_address = rpc_namenode_fqdn
+end
+
 location_domain_id = node['hops']['nn']['private_ips_domainIds'].has_key?(my_ip) ? node['hops']['nn']['private_ips_domainIds'][my_ip] : 0
 template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   source "hdfs-site.xml.erb"
@@ -258,7 +266,8 @@ template "#{node['hops']['conf_dir']}/hdfs-site.xml" do
   cookbook "hops"
   variables({
     :location_domain_id => location_domain_id,
-    :bind_ip => bind_ip
+    :bind_ip => bind_ip,
+    :nn_address => nn_address
   })
   action :create
 end
