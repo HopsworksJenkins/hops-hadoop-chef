@@ -50,9 +50,30 @@ end
 action :put_as_superuser do
   Chef::Log.info "Putting file(s) #{@new_resource.isDir} from directory #{@new_resource.name} into hdfs directory #{@new_resource.dest}"
 
+  # HDFS operation will be done with group HDFS because the client
+  # needs to be able to access hdfs user certificates
+  # So stage them first and chgrp to hdfs before putting them to hdfs
+  stagingDir = "#{Chef::Config['file_cache_path']}/hdfs_directory_staging"
+  directory stagingDir do
+    owner node['hops']['hdfs']['user']
+    group node['hops']['group']
+    mode "0770"
+    action :create
+  end
+  
+  basename = ::File.basename(new_resource.name)
+  bash "stage-file" do
+    user "root"
+    group "root"
+    code <<-EOH
+      cp -rf #{new_resource.name} #{stagingDir}/#{basename}
+      chgrp -R #{node['hops']['hdfs']['group']} #{stagingDir}/#{basename}
+    EOH
+  end
+
   bash "hdfs-put-dir-#{new_resource.name}" do
     user node['hops']['hdfs']['user']
-    group node['hops']['group']
+    group node['hops']['hdfs']['group']
     code <<-EOF
      EXISTS=1
      . #{node['hops']['base_dir']}/sbin/set-env.sh
@@ -64,7 +85,7 @@ action :put_as_superuser do
         EXISTS=$?
      fi
      if ([ $EXISTS -ne 0 ] || [ #{new_resource.isDir} ]) ; then
-        #{node['hops']['base_dir']}/bin/hdfs dfs -copyFromLocal #{new_resource.name} #{new_resource.dest}
+        #{node['hops']['base_dir']}/bin/hdfs dfs -copyFromLocal #{stagingDir}/#{basename} #{new_resource.dest}
         #{node['hops']['base_dir']}/bin/hdfs dfs -chown #{new_resource.owner} #{new_resource.dest}
         #{node['hops']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource.group} #{new_resource.dest}
         if [ "#{new_resource.mode}" != "" ] ; then
@@ -72,8 +93,17 @@ action :put_as_superuser do
         fi
      fi
     EOF
+    notifies :run, 'bash[delete-stage]', :immediately
   end
 
+  bash "delete-stage" do
+    user "root"
+    group "root"
+    code <<-EOH
+      rm -rf #{stagingDir}/#{basename}
+    EOH
+    action :nothing
+  end
 end
 
 
@@ -87,7 +117,7 @@ action :create_as_superuser do
 
   bash "mk-dir-#{new_resource.name}" do
     user node['hops']['hdfs']['user']
-    group node['hops']['group']
+    group node['hops']['hdfs']['group']
     retries 1
     code <<-EOF
      . #{node['hops']['base_dir']}/sbin/set-env.sh
@@ -118,7 +148,7 @@ action :rm_as_superuser do
 
   bash "rm-#{new_resource.name}" do
     user node['hops']['hdfs']['user']
-    group node['hops']['group']
+    group node['hops']['hdfs']['group']
     ignore_failure true
     code <<-EOF
      . #{node['hops']['base_dir']}/sbin/set-env.sh

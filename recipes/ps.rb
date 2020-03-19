@@ -1,5 +1,26 @@
 include_recipe "hops::default"
 
+# Proxyserver and NodeManager run as the same user
+# Generate certificate only once
+unless exists_local("hops", "nm")
+  # User certs must belong to yarn group to be able to rotate x509 material
+  group node['hops']['yarn']['group'] do
+    action :modify
+    members node['kagent']['certs_user']
+    append true
+    not_if { node['install']['external_users'].casecmp("true") == 0 }
+  end
+
+  crypto_dir = x509_helper.get_crypto_dir(node['hops']['yarn']['user-home'])
+  kagent_hopsify "Generate x.509" do
+    user node['hops']['yarn']['user']
+    group node['hops']['yarn']['group']
+    crypto_directory crypto_dir
+    action :generate_x509
+    not_if { conda_helpers.is_upgrade || node["kagent"]["test"] == true }
+  end
+end
+
 yarn_service="ps"
 service_name="proxyserver"
 

@@ -1,5 +1,21 @@
 include_recipe "hops::default"
 
+# User certs must belong to mr group to be able to rotate x509 material
+group node['hops']['mr']['group'] do
+  action :modify
+  members node['kagent']['certs_user']
+  append true
+  not_if { node['install']['external_users'].casecmp("true") == 0 }
+end
+
+crypto_dir = x509_helper.get_crypto_dir(node['hops']['mr']['user-home'])
+kagent_hopsify "Generate x.509" do
+  user node['hops']['mr']['user']
+  group node['hops']['mr']['group']
+  crypto_directory crypto_dir
+  action :generate_x509
+  not_if { conda_helpers.is_upgrade || node["kagent"]["test"] == true }
+end
 
 yarn_service="jhs"
 service_name="historyserver"

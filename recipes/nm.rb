@@ -2,10 +2,28 @@ include_recipe "hops::default"
 
 template_ssl_server()
 
+# User certs must belong to yarn group to be able to rotate x509 material
+group node['hops']['yarn']['group'] do
+  action :modify
+  members node['kagent']['certs_user']
+  append true
+  not_if { node['install']['external_users'].casecmp("true") == 0 }
+end
+
+crypto_dir = x509_helper.get_crypto_dir(node['hops']['yarn']['user-home'])
+kagent_hopsify "Generate x.509" do
+  user node['hops']['yarn']['user']
+  group node['hops']['yarn']['group']
+  crypto_directory crypto_dir
+  action :generate_x509
+  not_if { conda_helpers.is_upgrade || node["kagent"]["test"] == true }
+end
+
 deps = ""
 if service_discovery_enabled()
   deps += "consul.service "
 end
+
 if exists_local("hops", "rm")
   deps += "resourcemanager.service "
 end
@@ -13,9 +31,8 @@ end
 yarn_service="nm"
 service_name="nodemanager"
 
-
 directory node['hops']['yarn']['nodemanager_recovery_dir'] do
-  owner node['hops']['nm']['user']
+  owner node['hops']['yarn']['user']
   group node['hops']['group']
   mode "0770"
   action :create

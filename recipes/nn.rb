@@ -4,11 +4,21 @@ template_ssl_server()
 
 my_ip = my_private_ip()
 
-group node['hops']['secure_group'] do
+# User certs must belong to hdfs group to be able to rotate x509 material
+group node['hops']['hdfs']['group'] do
   action :modify
-  members ["#{node['hops']['hdfs']['user']}"]
+  members node['kagent']['certs_user']
   append true
   not_if { node['install']['external_users'].casecmp("true") == 0 }
+end
+
+crypto_dir = x509_helper.get_crypto_dir(node['hops']['hdfs']['user-home'])
+kagent_hopsify "Generate x.509" do
+  user node['hops']['hdfs']['user']
+  group node['hops']['hdfs']['group']
+  crypto_directory crypto_dir
+  action :generate_x509
+  not_if { conda_helpers.is_upgrade || node["kagent"]["test"] == true }
 end
 
 file "#{node['hops']['conf_dir']}/dfs.exclude" do 
@@ -109,8 +119,6 @@ end
   end
 end
 
-
-
 if node['kagent']['enabled'] == "true"
   kagent_config service_name do
     service "HDFS"
@@ -118,7 +126,6 @@ if node['kagent']['enabled'] == "true"
     log_file "#{node['hops']['logs_dir']}/hadoop-#{node['hops']['hdfs']['user']}-#{service_name}-#{node['hostname']}.log"
   end
 end
-
 
 # Register NameNode with Consul
 if node['hops']['tls']['enabled'].casecmp?("true")
@@ -129,12 +136,15 @@ else
   http_port = node['hops']['nn']['http_port']
 end
 
+consul_crypto_dir = x509_helper.get_crypto_dir(node['consul']['home'])
 template "#{node['hops']['bin_dir']}/consul/nn-health.sh" do
   source "consul/nn-health.sh.erb"
   owner node['hops']['hdfs']['user']
   group node['hops']['group']
   mode 0750
   variables({
+    :key => "#{consul_crypto_dir}/#{x509_helper.get_private_key_pkcs8_name(node['consul']['user'])}",
+    :certificate => "#{consul_crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['consul']['user'])}",
     :scheme => scheme,
     :http_port => http_port
   })
