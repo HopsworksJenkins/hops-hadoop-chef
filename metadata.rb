@@ -380,6 +380,22 @@ attribute "hops/group",
           :description => "Group to run hdfs/yarn/yarnapp/mr as",
           :type => 'string'
 
+attribute "hops/hdfs/user-home",
+          :description => "Home directory of hdfs user",
+          :type => 'string'
+
+attribute "hops/yarn/user-home",
+          :description => "Home directory of yarn user",
+          :type => 'string'
+
+attribute "hops/rm/user-home",
+          :description => "Home directory of rm user",
+          :type => 'string'
+
+attribute "hops/mr/user-home",
+          :description => "Home directory of mr user",
+          :type => 'string'
+
 attribute "hops/yarn/user",
           :description => "Username to run yarn as",
           :type => 'string'
