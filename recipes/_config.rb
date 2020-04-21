@@ -16,7 +16,7 @@ end
 
 # Override install binaries for enterprise edition
 if node['install']['enterprise']['install'].casecmp? "true"
-  node.override['hops']['dist_url']    = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-#{node['hops']['version']}.tgz"
-  node.override['hops']['schema_dir']  = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-schemas"
-  node.override['dal']['download_url'] = "#{node['install']['enterprise']['download_url']}/hopshadoop/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+  #node.override['hops']['dist_url']    = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-#{node['hops']['version']}.tgz"
+  #node.override['hops']['schema_dir']  = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-schemas"
+  #node.override['dal']['download_url'] = "#{node['install']['enterprise']['download_url']}/hopshadoop/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
 end

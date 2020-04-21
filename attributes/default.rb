@@ -69,7 +69,8 @@ default['hops']['hdfs']['umask']               = "0022"
 
 
 default['hops']['root_url']                    = node['download_url']
-default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+#default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+default['hops']['dist_url'] = "http://snurran.sics.se/hops/antonis/hops/certs/hops-2.8.2.10-SNAPSHOT.tgz"
 
 default['hops']['install_protobuf']            = "false"
 default['hops']['protobuf_url']                = "https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz"

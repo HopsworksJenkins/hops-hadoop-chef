@@ -220,6 +220,10 @@ attribute "hops/root_url",
           :description => "Download url of hops distribution artifacts",
           :type => 'string'
 
+attribute "hops/dist_url",
+          :description => "Download url for Hops binaries",
+          :type => 'string'
+
 attribute "hops/server/threadpool",
           :description => "Number of threads in RPC server reading from socket",
           :type => 'string'
