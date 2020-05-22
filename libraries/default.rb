@@ -33,5 +33,16 @@ module Hops
     def service_discovery_enabled()
       exists_local('consul', 'master') or exists_local('consul', 'slave')
     end
+
+    def get_hops_version()
+      # Set Hops EE version
+      version = node['hops']['version']
+      version_arr = version.split("-")
+      version = version_arr[0] + "-EE"
+      if version_arr.size > 1
+        version = version + "-" + version_arr[1]
+      end
+      version
+    end
   end
 end
