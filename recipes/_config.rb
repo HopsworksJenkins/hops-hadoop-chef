@@ -1,4 +1,5 @@
 # if tls is enabled, setup dev settings by default.
+Chef::Recipe.send(:include, Hops::Helpers)
 
 if node['hops']['tls']['prod'].eql?("true")
   node.override['hops']['tls']['crl_fetcher_class'] = "org.apache.hadoop.security.ssl.RemoteCRLFetcher"
