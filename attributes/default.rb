@@ -69,8 +69,12 @@ default['hops']['install_protobuf']            = "false"
 default['hops']['protobuf_url']                = "https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz"
 default['hops']['hadoop_src_url']              = "https://archive.apache.org/dist/hadoop/core/hadoop-" + node['hops']['version'] + "/hadoop-" + node['hops']['version'] + "-src.tar.gz"
 default['hops']['nn']['http_port']             = 50070
+default['hops']['nn']['https_port']            = 50470
 default['hops']['dn']['http_port']             = 50075
+default['hops']['dn']['https_port']            = 50475
 default['hops']['nn']['port']                  = 8020
+default['hops']['dn']['port']                  = 50010
+default['hops']['nn']['ipc_port']              = 50020
 
 default['hops']['nn']['format_options']        = "-format -nonInteractive"
 

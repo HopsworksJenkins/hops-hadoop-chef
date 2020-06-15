@@ -529,4 +529,28 @@
    <description>Upload file block to s3 using multipart API</description>
 </property>
 
+<property>
+   <name>dfs.datanode.ipc.address</name>
+   <value><%= @bind_ip %>:<%= node['hops']['nn']['ipc_port'] %></value>
+   <description>The datanode ipc server address and port. </description>
+</property>
+
+<property>
+   <name>dfs.datanode.https.address</name>
+   <value><%= @bind_ip %>:<%= node['hops']['dn']['https_port'] %></value>
+   <description>The datanode secure http server address and port.</description>
+</property>
+
+<property>
+   <name>dfs.datanode.address</name>
+   <value><%= @bind_ip %>:<%= node['hops']['dn']['port'] %></value>
+   <description>The datanode server address and port for data transfer.</description>
+</property>
+
+<property>
+   <name>dfs.namenode.https-address</name>
+   <value><%= @bind_ip %>:<%= node['hops']['nn']['https_port'] %></value>
+   <description>The namenode secure http server address and port.</description>
+</property>
+
 </configuration>
