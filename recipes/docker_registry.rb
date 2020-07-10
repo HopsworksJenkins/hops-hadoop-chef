@@ -105,16 +105,16 @@ end
 bash "tag_image" do
   user "root"
   code <<-EOF
-    docker tag python36 #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36
+    docker tag python36 #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['hopsworks']['version']}
   EOF
-  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36"
+  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['hopsworks']['version']}"
 end
 
 #push image to registry
 bash "push_image" do
   user "root"
   code <<-EOF
-    docker push #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36
+    docker push #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['hopsworks']['version']}
   EOF
 end
 
