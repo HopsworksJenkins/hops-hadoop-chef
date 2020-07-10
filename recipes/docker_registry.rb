@@ -89,7 +89,7 @@ bash "download_image" do
   code <<-EOF
        #{download_command} -O #{Chef::Config['file_cache_path']}/#{base_filename}
   EOF
-  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36"
+  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['install']['version']}"
 end
 
 #import docker image
@@ -98,23 +98,23 @@ bash "import_image" do
   code <<-EOF
     docker load -i #{Chef::Config['file_cache_path']}/#{base_filename}
   EOF
-  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36"
+  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['install']['version']}"
 end
 
 #tag image
 bash "tag_image" do
   user "root"
   code <<-EOF
-    docker tag python36 #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36
+    docker tag python36 #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['install']['version']}
   EOF
-  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36"
+  not_if "docker image inspect #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['install']['version']}"
 end
 
 #push image to registry
 bash "push_image" do
   user "root"
   code <<-EOF
-    docker push #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36
+    docker push #{registry_host}:#{node['hops']['docker']['registry']['port']}/python36:#{node['install']['version']}
   EOF
 end
 
