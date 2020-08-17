@@ -138,7 +138,7 @@ kagent_config service_name do
 end
 
 kagent_sudoers "dockerImage" do
-  user          node['kagent']['user']
+  user          "#{node['glassfish']['user']},#{node['kagent']['user']}"
   group         "root"
   script_name   "dockerImage.sh"
   template      "dockerImage.sh.erb"
