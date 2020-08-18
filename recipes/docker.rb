@@ -136,11 +136,3 @@ end
 kagent_config service_name do
   action :systemd_reload
 end
-
-kagent_sudoers "dockerImage" do
-  user          "#{node['glassfish']['user']},#{node['kagent']['user']}"
-  group         "root"
-  script_name   "dockerImage.sh"
-  template      "dockerImage.sh.erb"
-  run_as        "ALL" # run this as root - inside we change to different users
-end
