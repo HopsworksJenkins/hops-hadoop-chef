@@ -105,7 +105,7 @@ download_command = " wget #{image_url}"
 base_image = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']['name']}:#{node['install']['version']}"
 base_image_python = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']['python']['name']}:#{node['install']['version']}"
 
-if node['install']['enterprise']['install'].casecmp? "true"
+if node['install']['enterprise']['install'].casecmp? "fixme"
   image_url ="#{node['install']['enterprise']['download_url']}/docker-tars/#{node['hops']['docker_img_version']}/#{base_filename}"
   download_command = " wget --user #{node['install']['enterprise']['username']} --password #{node['install']['enterprise']['password']} #{image_url}"
 end
