@@ -102,8 +102,8 @@ image_url = node['hops']['docker']['base']['download_url']
 base_filename = File.basename(image_url)
 download_command = " wget #{image_url}"
 
-base_image = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']}:#{node['install']['version']}"
-base_image_python = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']['python']}:#{node['install']['version']}"
+base_image = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']['name']}:#{node['install']['version']}"
+base_image_python = "#{registry_host}:#{node['hops']['docker']['registry']['port']}/#{node['hops']['docker']['base']['image']['python']['name']}:#{node['install']['version']}"
 
 if node['install']['enterprise']['install'].casecmp? "true"
   image_url ="#{node['install']['enterprise']['download_url']}/docker-tars/#{node['hops']['docker_img_version']}/#{base_filename}"
@@ -132,8 +132,8 @@ end
 bash "tag_images" do
   user "root"
   code <<-EOF
-    docker tag #{node['hops']['docker']['base']['image']} #{base_image}
-    docker tag #{node['hops']['docker']['base']['image']['python']} #{base_image_python}
+    docker tag #{node['hops']['docker']['base']['image']['name']} #{base_image}
+    docker tag #{node['hops']['docker']['base']['image']['python']['name']} #{base_image_python}
   EOF
   not_if "docker image inspect #{base_image} #{base_image_python}"
 end
