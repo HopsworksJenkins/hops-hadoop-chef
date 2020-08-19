@@ -132,8 +132,8 @@ end
 bash "tag_images" do
   user "root"
   code <<-EOF
-    docker tag #{node['hops']['docker']['base']['image']['name']}:#{node['hops']['docker_img_version']} #{base_image}
-    docker tag #{node['hops']['docker']['base']['image']['python']['name']}:#{node['hops']['docker_img_version']} #{base_image_python}
+    docker tag #{node['hops']['docker']['base']['image']['name']}:#{node['install']['version']} #{base_image}
+    docker tag #{node['hops']['docker']['base']['image']['python']['name']}:#{node['install']['version']} #{base_image_python}
   EOF
   not_if "docker image inspect #{base_image} #{base_image_python}"
 end
