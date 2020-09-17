@@ -92,7 +92,7 @@ default['hops']['io_buffer_sz']                = 131072
 default['hops']['container_cleanup_delay_sec'] = 0
 
 default['hops']['nn']['replace-dn-on-failure']        = true
-default['hops']['nn']['replace-dn-on-failure-policy'] = "DEFAULT" 
+default['hops']['nn']['replace-dn-on-failure-policy'] = "NEVER" 
 
 default['hops']['yarn']['scripts']             = %w{ start stop restart }
 default['hops']['yarn']['ps_port']             = 20888
@@ -444,6 +444,7 @@ default['hops']['nn']['enable_retrycache']            = "true"
 
 default['hops']['hdfs']['quota_enabled']              = "true"
 default['hops']['nn']['handler_count']                = 120
+default['hops']['nn']['subtree-executor-limit']       = 40
 
 default['hops']['gcp_url']                            = node['hops']['root_url'] + "/gcs-connector-hadoop2-latest.jar"
 
