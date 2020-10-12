@@ -64,7 +64,10 @@ default['hops']['hdfs']['umask']               = "0027"
 
 
 default['hops']['root_url']                    = node['download_url']
-default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+#default['hops']['dist_url']                    = node['hops']['root_url'] + "/hops-" + node['hops']['version'] + ".tgz"
+#This will be fixed before the merge
+
+default['hops']['dist_url']                    = "https://nexus.hops.works/repository/dev/salman/hops-" + node['hops']['version'] + ".tgz"
 
 default['hops']['install_protobuf']            = "false"
 default['hops']['protobuf_url']                = "https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz"
@@ -229,7 +232,9 @@ if node['hops']['ndb']['version'] != ""
   node.override['ndb']['version'] = node['hops']['ndb']['version']
 end
 
-default['dal']['download_url']              = "#{node['hops']['root_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+#default['dal']['download_url']              = "#{node['hops']['root_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+#This will be fixed before merge
+default['dal']['download_url']              = "https://nexus.hops.works/repository/dev/salman/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
 
 default['hops']['recipes']                  = %w{ nn dn rm nm jhs ps }
 
