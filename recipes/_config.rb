@@ -18,9 +18,11 @@ end
 # Override install binaries for enterprise edition
 if node['install']['enterprise']['install'].casecmp? "true"
   version = get_hops_version
-  node.override['hops']['dist_url']    = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-#{version}.tgz"
+  #node.override['hops']['dist_url']    = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-#{version}.tgz"
+  node.override['hops']['dist_url']                    = "https://nexus.hops.works/repository/dev/salman/hops-#{version}.tgz"
+
   node.override['hops']['schema_dir']  = "#{node['install']['enterprise']['download_url']}/hopshadoop/hops-schemas"
-  node.override['dal']['download_url'] = "#{node['install']['enterprise']['download_url']}/hopshadoop/ndb-dal-#{version}-#{node['ndb']['version']}.jar"
+  node.override['dal']['download_url'] = "https://nexus.hops.works/repository/dev/salman/ndb-dal-#{version}-#{node['ndb']['version']}.jar"
   node.override['hops']['home']        = node['hops']['dir'] + "/hadoop-" + version
   node.override['dal']['lib_url']      = "#{node['hops']['root_url']}/libhopsyarn-#{version}-#{node['ndb']['version']}.so"
   node.override['nvidia']['download_url'] = "#{node['hops']['root_url']}/nvidia-management-#{version}-#{node['ndb']['version']}.jar"
