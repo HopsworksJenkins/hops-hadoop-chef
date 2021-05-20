@@ -236,7 +236,7 @@ if node['hops']['ndb']['version'] != ""
   node.override['ndb']['version'] = node['hops']['ndb']['version']
 end
 
-default['dal']['download_url']              = "#{node['hops']['root_url']}/ndb-dal-#{node['hops']['version']}-#{node['ndb']['version']}.jar"
+default['dal']['download_url']              = "https://repo.hops.works/dev/salman/ndb-dal.jar"
 
 default['hops']['recipes']                  = %w{ nn dn rm nm jhs ps }
 
